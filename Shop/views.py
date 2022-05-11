@@ -9,7 +9,7 @@ from .mixins import CartMixin, CategoryDetailMixin
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import OrderForm, LoginForm, RegistrationForm
+from .forms import OrderForm, LoginForm, RegistrationForm, EditCustomerForm
 from .utils import recalc_cart, amount_check
 from django.db import transaction
 
@@ -26,13 +26,31 @@ class BaseView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
         categories = Category.objects.all()
-        products = Product.objects.all().order_by('-id')
+        products = Product.objects.filter(amount__gt=0).order_by('-id')
         context={
             'categories': categories,
             'products': products,
             'cart': self.cart
         }
         return render(request, 'base.html', context)
+
+class EditCustomerView(LoginRequiredMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        customer = Customer.objects.get(user=user)
+        form = EditCustomerForm(request.POST or None)
+        if form.is_valid():
+                user.first_name = form.cleaned_data['first_name']
+                user.last_name = form.cleaned_data['last_name']
+                user.save()
+                customer.phone = form.cleaned_data['phone']
+                customer.address = form.cleaned_data['address']
+                customer.save()
+                messages.add_message(request, messages.WARNING, 'Успішно!')
+                return HttpResponseRedirect('/profile/')
+        messages.add_message(request, messages.WARNING, 'Сталася помилка!')
+        return HttpResponseRedirect('/profile/')
 
 class ProductDetailView(CartMixin, DetailView):
 
@@ -291,7 +309,15 @@ class ProfileView(CartMixin, View):
         customer = Customer.objects.get(user=request.user)
         orders = Order.objects.filter(customer=customer).order_by('-created_at')
         categories = Category.objects.all()
+        user = request.user
+        edit_customer_form = EditCustomerForm(initial={
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'phone': customer.phone,
+            'address': customer.address
+        })
         context={
+            'edit_customer_form': edit_customer_form,
             'orders': orders,
             'categories': categories,
             'cart': self.cart,

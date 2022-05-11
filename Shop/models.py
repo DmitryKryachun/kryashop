@@ -47,7 +47,7 @@ class Product(models.Model):
     slug = models.SlugField(unique=True)
     image = models.ImageField(verbose_name='Зображення')
     description = models.TextField(verbose_name='Опис', null=True)
-    amount = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Кількість на складі', validators=[
+    amount = models.PositiveIntegerField(default=1, verbose_name='Кількість на складі', validators=[
         MaxValueValidator(
             limit_value = 100000,
             message = 'Не може бути більше 100 тисяч'
@@ -57,6 +57,16 @@ class Product(models.Model):
             message = 'Кількість не може бути нижчою за 0!'
         )
     ])
+    # amount = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Кількість на складі', validators=[
+    #     MaxValueValidator(
+    #         limit_value = 100000,
+    #         message = 'Не може бути більше 100 тисяч'
+    #     ),
+    #     MinValueValidator(
+    #         limit_value=0,
+    #         message = 'Кількість не може бути нижчою за 0!'
+    #     )
+    # ])
     price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Ціна', validators=[
         MaxValueValidator(
             limit_value = 1000000,
@@ -65,6 +75,12 @@ class Product(models.Model):
         MinValueValidator(
             limit_value=0,
             message = 'Ціна не може бути нижчою за 0 гривень!'
+        )
+    ])
+    old_price = models.DecimalField(max_digits=9, decimal_places=2, default=0, verbose_name='Стара ціна', validators=[
+        MaxValueValidator(
+            limit_value = 1000000,
+            message = 'Ціна не може перевищувати 1 млн грн!'
         )
     ])
     features = models.ManyToManyField("specs.ProductFeatures", blank=True, related_name='features_for_product')

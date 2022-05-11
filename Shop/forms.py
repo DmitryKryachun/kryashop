@@ -3,7 +3,7 @@ from django.contrib.contenttypes import fields
 from django.core.exceptions import ValidationError
 from django.forms.fields import EmailField
 from django.forms.formsets import formset_factory
-from .models import Order
+from .models import Order, Customer
 from django.contrib.auth.models import User
 
 class OrderForm(forms.ModelForm):
@@ -99,5 +99,22 @@ class RegistrationForm(forms.ModelForm):
 
         return self.cleaned_data
 
+class EditCustomerForm(forms.ModelForm):
+    phone = forms.CharField(required=False)
+    address = forms.CharField(required=False)
+        
+
+    class Meta:
+        model = User
+        fields = (
+            'first_name', 'last_name', 'phone', 'address'
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].label = 'Імя'
+        self.fields['last_name'].label = 'Прізвище'
+        self.fields['phone'].label = 'Номер телефону'
+        self.fields['address'].label = 'Адреса'
     
     

@@ -34,10 +34,13 @@
         <div class="card h-100 product">
           <a href="{{ product.get_absolute_url }}"><img class="card-img-top" style="border-radius: 20px;" src="{{ product.image.url }}" alt=""></a>
           <div class="card-body">
-            <h4 class="card-title">
+            <h5 class="card-title">
               <a href="{{ product.get_absolute_url }}">{{product.brand.brand_text}} {{ product.title }}</a>
-            </h4>
-            <h5>{{ product.price }} грн.</h5>
+            </h5>
+            {% if product.old_price > product.price %}
+            <h6 class="text-decoration-line-through" style="color: rgb(146, 5, 5);">{{ product.old_price }} грн.</h6>
+            {%endif%}
+            <h4>{{ product.price }} грн.</h4>
             {% if product.amount <= 0 %}
                 <h5>Немає в наявності</h5>
                 {%endif%}

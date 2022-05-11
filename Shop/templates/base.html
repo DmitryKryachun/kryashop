@@ -18,7 +18,7 @@
   <!-- Custom styles for this template -->
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
   </style>
 
 
@@ -31,7 +31,7 @@
 
   body {
     height: 100%;
-    font-family: 'Rubik', sans-serif;   
+    font-family: 'Comfortaa', cursive;  
   }
 
   .product {
@@ -69,7 +69,7 @@
   text-decoration: none; 
   font-size: 14px;
   color: white; 
-  background-color: rgb(0, 161, 135); 
+  background-color: rgb(4, 190, 181); 
   transition: .1s;
   box-shadow: 0 0 15px rgba(33,33,33,0.5);
     padding-top: 10px;
@@ -208,10 +208,13 @@
               <a href="{{ product.get_absolute_url }}"><img class="card-img-top mx-auto d-block" style="border-radius: 20px;" src="{{ product.image.url }}"
                   alt=""></a>
               <div class="card-body">
-                <h4 class="card-title">
+                <h5 class="card-title">
                   <a href="{{ product.get_absolute_url }}">{{product.brand.brand_text}} {{ product.title }}</a>
-                </h4>
-                <h5>{{ product.price }} грн.</h5>
+                </h5>
+                {% if product.old_price > product.price %}
+                <h6 class="text-decoration-line-through" style="color: rgb(146, 5, 5);">{{ product.old_price }} грн.</h6>
+                {% endif %}
+                <h4>{{ product.price }} грн.</h4>
                 {% if product.amount <= 0 %}
                 <h5>Немає в наявності</h5>
                 {%endif%}
@@ -241,7 +244,7 @@
         <button type="button" class="btn btn-success" style="padding-top: 3px; padding-bottom: 2px;" data-bs-toggle="modal" data-bs-target="#aboutModal">
           DmitroK &copy;
         </button>
-        Дипломна робота, 2022
+        Buzivka city, 2022
       </p>
     </div>
 

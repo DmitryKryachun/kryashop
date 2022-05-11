@@ -16,9 +16,14 @@
         <h3>{{product.brand.brand_text}} {{product.title}}</h3>
         <p>Бренд: {{product.brand.brand_text}}</p>
         <p>Категорія: {{product.category.name}}</p>
-        <h3>Ціна: <span style="color:darkgreen">{{product.price}} грн.</span></h3>
+        {% if product.old_price > product.price %}
+        <h5 class="text-decoration-line-through" style="color: rgb(146, 5, 5);">{{ product.old_price }} грн.</h5>
+        {%endif%}
+        <h3><span style="color:darkgreen">{{product.price}} грн.</span></h3>
+
         <p>Опис: {{product.description}}</p>
         <hr>
+        
         {% if product.amount <= 0 %}
                 <h5>Немає в наявності</h5>
                 {%endif%}

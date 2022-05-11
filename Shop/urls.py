@@ -2,7 +2,7 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 from Shop.forms import LoginForm
-from .views import AddToCartView, BaseView, CartView, LoginView, ProductDetailView, CategoryDetailView, DeleteFromCartView, ChangeQTYView, CheckoutView, MakeOrderView, ProfileView, RegistrationView
+from .views import AddToCartView, BaseView, CartView, LoginView, ProductDetailView, CategoryDetailView, DeleteFromCartView, ChangeQTYView, CheckoutView, MakeOrderView, ProfileView, RegistrationView, EditCustomerView
 
 
 handler404 = "Shop.views.page_not_found_view"
@@ -20,5 +20,6 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('registration/', RegistrationView.as_view(), name='registration'),
     path('logout/', LogoutView.as_view(next_page="/"), name='logout'),
-    path('profile/', ProfileView.as_view(), name='profile')
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('edit-customer/', EditCustomerView.as_view(), name='edit_customer')
 ]

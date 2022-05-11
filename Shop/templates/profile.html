@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>{{ message }}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+
+
+
+<div class="col-md-12" style="margin-top: 30px; margin-bottom: 30px;">
+  <div class="col-lg-6 col-md-6 mb-4">
+    <form action="{% url 'edit_customer' %}" method="POST">
+        {{edit_customer_form|crispy}}
+        {% csrf_token %}
+        <input type="submit" class="btn btn-warning btn-block mb-3" style="margin-bottom: 15px; margin-top: 15px;" value="Підтвердити">
+      </form>
+    </div>
+</div>
 
 <h3 class="text-center mt-3 mb-3">Замовлення покупця {{request.user.username}}</h3>
 
