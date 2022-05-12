@@ -1,13 +1,15 @@
+from asyncio.windows_events import NULL
 from collections import defaultdict
 
 from django.contrib import messages
+from django.forms import formset_factory
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponseRedirect, JsonResponse
 
 from .models import CategoryFeature, FeatureValidator, ProductFeatures
-from .forms import NewCategoryFeatureKeyForm, NewCategoryForm
-from Shop.models import Category, Product
+from .forms import EditOrderStatusForm, NewBrandForm, NewCategoryFeatureKeyForm, NewCategoryForm, NewProductForm
+from Shop.models import Category, Order, Product
 
 
 from .mixins import SecurityMixin
@@ -32,7 +34,7 @@ class CreateNewFeature(SecurityMixin,View):
             new_category_feature_key.category = form.cleaned_data['category']
             new_category_feature_key.feature_name = form.cleaned_data['feature_name']
             new_category_feature_key.save()
-        return HttpResponseRedirect('/product-specs/')
+        return HttpResponseRedirect('/administration/')
 
 
 class CreateNewCategory(SecurityMixin, View):
@@ -48,7 +50,60 @@ class CreateNewCategory(SecurityMixin, View):
             new_category = form.save(commit=False)
             new_category.name = form.cleaned_data['name']
             new_category.save()
-        return HttpResponseRedirect('/product-specs/')
+        return HttpResponseRedirect('/administration/')
+
+class CreateNewProduct(View):
+
+    def get(self, request, *args, **kwargs):
+        productForm = NewProductForm(request.POST or None)
+        context = {'form': productForm}
+        return render(request, 'new_product.html', context)
+
+    def post(self, request, *args, **kwargs):
+        productForm = NewProductForm(request.POST, request.FILES)
+        if productForm.is_valid():
+            print('TEst')
+            new_product = productForm.save(commit=True)
+            new_product.category = productForm.cleaned_data['category']
+            new_product.brand = productForm.cleaned_data['brand']
+            new_product.title = productForm.cleaned_data['title']
+            new_product.slug = productForm.cleaned_data['slug']
+            new_product.image = productForm.cleaned_data['image']
+            print(new_product.image.width)
+            new_product.amount = productForm.cleaned_data['amount']
+            new_product.price = productForm.cleaned_data['price']
+            new_product.old_price = productForm.cleaned_data['old_price']
+            new_product.description = productForm.cleaned_data['description']
+            new_product.save()
+            messages.add_message(request, messages.SUCCESS, 'Успішно додано товар!')
+            return HttpResponseRedirect('/administration/')
+        print('TEst2')
+        messages.add_message(request, messages.SUCCESS, 'ВИНИКЛА ПОМИЛКА!')
+        return render(request, 'new_product.html', {'form': productForm})
+
+
+class CreateNewBrand(SecurityMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        form = NewBrandForm(request.POST or None)
+        context = {'form': form}
+        return render(request, 'new_brand.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = NewBrandForm(request.POST or None)
+        if form.is_valid():
+            new_brand = form.save(commit=False)
+            new_brand.slug = form.cleaned_data['slug']
+            new_brand.phone = form.cleaned_data['phone']
+            new_brand.brand_text = form.cleaned_data['brand_text']
+            new_brand.email = form.cleaned_data['email']
+            new_brand.top_brand = form.cleaned_data['top_brand']
+            new_brand.save()
+            messages.add_message(request, messages.SUCCESS, 'Успішно додано бренд!')
+            return HttpResponseRedirect('/administration/')
+        messages.add_message(request, messages.SUCCESS, 'ВИНИКЛА ПОМИЛКА!')
+        return HttpResponseRedirect('/administration/')
+
 
 
 class CreateNewFeatureValidator(SecurityMixin, View):
@@ -302,3 +357,74 @@ class UpdateProductFeaturesAjaxView(SecurityMixin, View):
             f'Значення характеристик для товару {product.title} успішно оновлено!'
         )
         return JsonResponse({"result": "ok"})
+
+
+class OrdersView(SecurityMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        orders = Order.objects.all().order_by('-created_at')
+        form = EditOrderStatusForm()
+        context={
+            'orders': orders,
+            'form': form
+        }
+        return render(request, 'all_orders.html', context)
+
+class NewOrdersView(SecurityMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        orders = Order.objects.filter(status=Order.STATUS_NEW).order_by('-created_at')
+        form = EditOrderStatusForm()
+        context={
+            'orders': orders,
+            'form': form
+        }
+        return render(request, 'all_orders.html', context)
+
+
+class InProgressOrdersView(SecurityMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        orders = Order.objects.filter(status=Order.STATUS_IN_PROGRESS).order_by('-created_at')
+        form = EditOrderStatusForm()
+        context={
+            'orders': orders,
+            'form': form
+        }
+        return render(request, 'all_orders.html', context)
+
+class ReadyOrdersView(SecurityMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        orders = Order.objects.filter(status=Order.STATUS_READY).order_by('-created_at')
+        form = EditOrderStatusForm()
+        context={
+            'orders': orders,
+            'form': form
+        }
+        return render(request, 'all_orders.html', context)
+
+class CompletedOrdersView(SecurityMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        orders = Order.objects.filter(status=Order.STATUS_COMPLETED).order_by('-created_at')
+        form = EditOrderStatusForm()
+        context={
+            'orders': orders,
+            'form': form
+        }
+        return render(request, 'all_orders.html', context)
+
+class EditOrderStatusView(SecurityMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        form = EditOrderStatusForm(request.POST or None)
+        id = self.kwargs.get('pk')
+        order = Order.objects.get(id=id)
+        if form.is_valid():
+            order.status = form.cleaned_data['status']
+            order.save()
+            messages.add_message(request, messages.SUCCESS, 'Статус змінено!')
+            return HttpResponseRedirect('/administration/orders/')
+        messages.add_message(request, messages.SUCCESS, 'ВИНИКЛА ПОМИЛКА!')
+        return HttpResponseRedirect('/administration/orders/')

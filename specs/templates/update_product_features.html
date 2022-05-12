@@ -72,9 +72,9 @@
         $.ajax({
             method: "POST",
             data: data,
-            url: '/product-specs/update-product-features-ajax/',
+            url: '/administration/update-product-features-ajax/',
             success: function (data){
-                window.location.href = '/product-specs'
+                window.location.href = '/administration'
             }
         })
     })
@@ -105,7 +105,7 @@
             method: "GET",
             data:data,
             dataType: "json",
-            url: "/product-specs/show-product-features-for-update/",
+            url: "/administration/show-product-features-for-update/",
             success: function (data){
                 $(".product-features-update-list").append(
                     data.result
@@ -135,7 +135,7 @@
     method: "GET",
     dataType: "json",
     data: data,
-    url: "/product-specs/search-product/",
+    url: "/administration/search-product/",
     success: function(data){
         let items = []
         if(data.result.length < 1){

@@ -30,9 +30,9 @@
 </style>
 <body>
 <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: rgb(49, 66, 49);">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: rgb(142, 182, 0);">
         <div class="container">
-          <a class="navbar-brand" href="{% url 'base' %}">KRYACHUN|АДМІНІСТРУВАННЯ</a>
+          <a class="navbar-brand" href="{% url 'base' %}">KRYASHOP|АДМІНІСТРУВАННЯ</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
             aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -62,7 +62,7 @@
           </div>
         </div>
       </nav>
-<h3 class="text-center">Адміністрування характеристик</h3>
+<h3 class="text-center">Адміністрування магазину KRYASHOP</h3>
 <hr>
 {% if messages %}
     {% for message in messages %}
@@ -75,19 +75,42 @@
 <div class="row">
     <div class="col-md-4">
 <div class="list-group">
-    <a href="{% url 'new-category' %}" class="list-group-item list-group-item-action {% if request.path == '/product-specs/new-category/' %}active{% endif %}" aria-current="true">
+    <a href="{% url 'new-category' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-category/' %}active{% endif %}" aria-current="true">
     Створити нову категорію
   </a>
-  <a href="{% url 'new-feature' %}" class="list-group-item list-group-item-action {% if request.path == '/product-specs/new-feature/' %}active{% endif %}" aria-current="true">
+  <a href="{% url 'new-brand' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-brand/' %}active{% endif %}" aria-current="true">
+    Додати бренд
+  </a>
+  <a href="{% url 'new-product' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-product/' %}active{% endif %}" aria-current="true">
+    Додати новий товар
+  </a>
+  <br>
+  <a href="{% url 'new-feature' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-feature/' %}active{% endif %}" aria-current="true">
     Створити нову характеристику
   </a>
-    <a href="{% url 'new-validator' %}" class="list-group-item list-group-item-action {% if request.path == '/product-specs/new-validator/' %}active{% endif %}" aria-current="true">
+    <a href="{% url 'new-validator' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-validator/' %}active{% endif %}" aria-current="true">
     Створити значення характеристики
   </a>
-    <a href="{% url 'new-product-feature' %}" class="list-group-item list-group-item-action {% if request.path == '/product-specs/new-product-feature/' %}active{% endif %}" aria-current="true">
+    <a href="{% url 'new-product-feature' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-product-feature/' %}active{% endif %}" aria-current="true">
     Створити характеристику для товару
-    <a href="{% url 'update-product-features' %}" class="list-group-item list-group-item-action {% if request.path == '/product-specs/update-product-features/' %}active{% endif %}" aria-current="true">
+    <a href="{% url 'update-product-features' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/update-product-features/' %}active{% endif %}" aria-current="true">
     Редагувати характеристики товару
+  </a>
+  <br>
+  <a href="{% url 'orders' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/orders/' %}active{% endif %}" aria-current="true">
+    Усі замовлення
+  </a>
+  <a href="{% url 'new-orders' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/new-orders/' %}active{% endif %}" aria-current="true">
+    Нові замовлення
+  </a>
+  <a href="{% url 'in-progress-orders' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/in-progress-orders/' %}active{% endif %}" aria-current="true">
+    В роботі замовлення
+  </a>
+  <a href="{% url 'ready-orders' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/ready-orders/' %}active{% endif %}" aria-current="true">
+    Готові/відправленні замовлення
+  </a>
+  <a href="{% url 'completed-orders' %}" class="list-group-item list-group-item-action {% if request.path == '/administration/completed-orders/' %}active{% endif %}" aria-current="true">
+    Завершені замовлення
   </a>
 </div>
     </div>
@@ -119,7 +142,7 @@
             method: "GET",
             dataType: "json",
             data: data,
-            url: "/product-specs/feature-choice/",
+            url: "/administration/feature-choice/",
             success: function(data){
                 $(".feature-validator-div").css('display', 'block');
                 $(".feature-validator-div").append(data['result'])
@@ -150,7 +173,7 @@
             method: "GET",
             dataType: "json",
             data:data,
-            url: "/product-specs/feature-create/",
+            url: "/administration/feature-create/",
             success: function (data){
                 if('error' in data){
                     $('.errors').append(
@@ -158,7 +181,7 @@
                     )
                 }else{
                     console.log('Невдача')
-                    window.location.href="/product-specs/"
+                    window.location.href="/administration/"
                 }
             }
         })

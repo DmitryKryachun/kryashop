@@ -48,7 +48,7 @@
             method: "GET",
             dataType: "json",
             data: data,
-            url: '/product-specs/attach-new-product-feature/',
+            url: '/administration/attach-new-product-feature/',
             success: function (data){
                 console.log('Успіх')
             }
@@ -81,7 +81,7 @@
             method: "GET",
             data:data,
             dataType: "json",
-            url: "/product-specs/attach-feature/",
+            url: "/administration/attach-feature/",
             success: function (data){
                 $(".product-feature-choices").append(data.features)
             }
@@ -96,7 +96,7 @@
             method: "GET",
             dataType: "json",
             data: data,
-            url: "/product-specs/product-feature/",
+            url: "/administration/product-feature/",
             success: function (data){
                 $(".product-feature-choices-values").append(data.features)
             }
@@ -127,7 +127,7 @@
     method: "GET",
     dataType: "json",
     data: data,
-    url: "/product-specs/search-product/",
+    url: "/administration/search-product/",
     success: function(data){
         let items = []
         if(data.result.length < 1){

@@ -1,6 +1,8 @@
 
 from django.urls import path
 from django.contrib.auth.views import LogoutView
+from django.conf.urls.static import static
+from django.conf import settings
 from Shop.forms import LoginForm
 from .views import AddToCartView, BaseView, CartView, LoginView, ProductDetailView, CategoryDetailView, DeleteFromCartView, ChangeQTYView, CheckoutView, MakeOrderView, ProfileView, RegistrationView, EditCustomerView
 
@@ -22,4 +24,4 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page="/"), name='logout'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('edit-customer/', EditCustomerView.as_view(), name='edit_customer')
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

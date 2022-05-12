@@ -15,7 +15,7 @@ class Brand(models.Model):
     brand_text = models.CharField(max_length=30, verbose_name='Назва бренду')
     email = models.EmailField(verbose_name='Електронна пошта')
     phone = models.CharField(max_length=20, verbose_name='Номер телефону')
-    top_brand = models.BooleanField(default=True)
+    top_brand = models.BooleanField(default=True, verbose_name='Топ бренд')
 
     def __str__(self):
         return self.brand_text
@@ -45,7 +45,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, verbose_name='Бренд', on_delete=models.CASCADE, default='')
     title = models.CharField(max_length=100, verbose_name='Назва товару', default='default')
     slug = models.SlugField(unique=True)
-    image = models.ImageField(verbose_name='Зображення')
+    image = models.ImageField(verbose_name='Зображення', upload_to = "images/")
     description = models.TextField(verbose_name='Опис', null=True)
     amount = models.PositiveIntegerField(default=1, verbose_name='Кількість на складі', validators=[
         MaxValueValidator(
@@ -57,16 +57,6 @@ class Product(models.Model):
             message = 'Кількість не може бути нижчою за 0!'
         )
     ])
-    # amount = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Кількість на складі', validators=[
-    #     MaxValueValidator(
-    #         limit_value = 100000,
-    #         message = 'Не може бути більше 100 тисяч'
-    #     ),
-    #     MinValueValidator(
-    #         limit_value=0,
-    #         message = 'Кількість не може бути нижчою за 0!'
-    #     )
-    # ])
     price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Ціна', validators=[
         MaxValueValidator(
             limit_value = 1000000,
