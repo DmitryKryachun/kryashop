@@ -5,17 +5,18 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="{% url 'base'%}">Головна</a></li>
       <li class="breadcrumb-item"><a href="{% url 'category_detail' slug=product.category.slug %}">{{product.category.name}}</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'brand_detail' slug=product.brand.slug %}">{{product.brand.brand_text}}</a></li>
       <li class="breadcrumb-item active" aria-current="page">{{product.brand.brand_text}} {{ product.title }}</li>
     </ol>
 </nav>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <img src="{{product.image.url}}" class="img-fluid">
     </div>
-    <div class="col-md-8">
+    <div class="col-md-6">
         <h3>{{product.brand.brand_text}} {{product.title}}</h3>
-        <p>Бренд: {{product.brand.brand_text}}</p>
-        <p>Категорія: {{product.category.name}}</p>
+        <p>Бренд: <a href="{% url 'brand_detail' slug=product.brand.slug %}">{{product.brand.brand_text}}</a></p>
+        <p>Категорія: <a href="{% url 'category_detail' slug=product.category.slug %}">{{product.category.name}}</a></p>
         {% if product.old_price > product.price %}
         <h5 class="text-decoration-line-through" style="color: rgb(146, 5, 5);">{{ product.old_price }} грн.</h5>
         {%endif%}
@@ -38,7 +39,7 @@
             <tbody>
             {% for f_name, f_value in product.get_features.items %}
               <tr>
-                <th scope="row">{{ f_name }}</th>
+                <th scope="row">{{ f_name }}:</th>
                 <td>{{ f_value }}</td>
               </tr>
             {% endfor %}

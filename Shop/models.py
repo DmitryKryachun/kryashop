@@ -20,6 +20,9 @@ class Brand(models.Model):
     def __str__(self):
         return self.brand_text
 
+    def get_absolute_url(self):
+        return reverse('brand_detail', kwargs={'slug': self.slug})
+
     class Meta:
         verbose_name = 'Бренд'
         verbose_name_plural = 'Бренди'

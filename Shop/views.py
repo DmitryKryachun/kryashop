@@ -26,11 +26,13 @@ class BaseView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
         categories = Category.objects.all()
-        products = Product.objects.filter(amount__gt=0).order_by('-id')
+        products = Product.objects.filter(amount__gt=0).order_by('-id')[:6]
+        top_brands = Brand.objects.filter(top_brand=True)
         context={
             'categories': categories,
             'products': products,
-            'cart': self.cart
+            'cart': self.cart,
+            'top_brands': top_brands
         }
         return render(request, 'base.html', context)
 
@@ -328,3 +330,20 @@ class ProfileView(CartMixin, View):
 
 def page_not_found_view(request, exception):
     return render(request, '404.html', status=404)
+
+
+class BrandDetailView(CartMixin, DetailView):
+
+    model = Brand
+    queryset = Brand.objects.all()
+    context_object_name = 'brand'
+    template_name = 'brand_detail.html'
+    slug_url_kwarg = 'slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        brand = self.get_object()
+        context['cart'] = self.cart
+        context['categories'] = Category.objects.all()
+        context['brand_products'] = Product.objects.filter(brand=brand)
+        return context

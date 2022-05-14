@@ -4,7 +4,7 @@ from django.contrib.auth.views import LogoutView
 from django.conf.urls.static import static
 from django.conf import settings
 from Shop.forms import LoginForm
-from .views import AddToCartView, BaseView, CartView, LoginView, ProductDetailView, CategoryDetailView, DeleteFromCartView, ChangeQTYView, CheckoutView, MakeOrderView, ProfileView, RegistrationView, EditCustomerView
+from .views import AddToCartView, BaseView, BrandDetailView, CartView, LoginView, ProductDetailView, CategoryDetailView, DeleteFromCartView, ChangeQTYView, CheckoutView, MakeOrderView, ProfileView, RegistrationView, EditCustomerView
 
 
 handler404 = "Shop.views.page_not_found_view"
@@ -23,5 +23,6 @@ urlpatterns = [
     path('registration/', RegistrationView.as_view(), name='registration'),
     path('logout/', LogoutView.as_view(next_page="/"), name='logout'),
     path('profile/', ProfileView.as_view(), name='profile'),
-    path('edit-customer/', EditCustomerView.as_view(), name='edit_customer')
+    path('edit-customer/', EditCustomerView.as_view(), name='edit_customer'),
+    path('brands/<str:slug>/', BrandDetailView.as_view(), name='brand_detail')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
