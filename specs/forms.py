@@ -21,12 +21,12 @@ class NewCategoryForm(forms.ModelForm):
 
 class NewProductForm(forms.ModelForm):
 
-    title = forms.CharField(required=True)
-    slug = forms.CharField(required=True)
-    amount = forms.IntegerField(required=True, max_value=100000, min_value=0)
-    description = forms.CharField(required=True)
-    price = forms.FloatField(required=True, max_value=1000000, min_value=0)
-    old_price = forms.FloatField(required=True, max_value=1000000, min_value=0)
+    # title = forms.CharField(required=True)
+    # slug = forms.CharField(required=True)
+    # amount = forms.IntegerField(required=True, max_value=100000, min_value=0)
+    # description = forms.CharField(required=True)
+    # price = forms.FloatField(required=True, max_value=1000000, min_value=0)
+    # old_price = forms.FloatField(required=True, max_value=1000000, min_value=0)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

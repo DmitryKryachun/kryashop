@@ -52,7 +52,7 @@ class CreateNewCategory(SecurityMixin, View):
             new_category.save()
         return HttpResponseRedirect('/administration/')
 
-class CreateNewProduct(View):
+class CreateNewProduct(SecurityMixin, View):
 
     def get(self, request, *args, **kwargs):
         productForm = NewProductForm(request.POST or None)
@@ -62,7 +62,6 @@ class CreateNewProduct(View):
     def post(self, request, *args, **kwargs):
         productForm = NewProductForm(request.POST, request.FILES)
         if productForm.is_valid():
-            print('TEst')
             new_product = productForm.save(commit=True)
             new_product.category = productForm.cleaned_data['category']
             new_product.brand = productForm.cleaned_data['brand']
@@ -77,7 +76,6 @@ class CreateNewProduct(View):
             new_product.save()
             messages.add_message(request, messages.SUCCESS, 'Успішно додано товар!')
             return HttpResponseRedirect('/administration/')
-        print('TEst2')
         messages.add_message(request, messages.SUCCESS, 'ВИНИКЛА ПОМИЛКА!')
         return render(request, 'new_product.html', {'form': productForm})
 
