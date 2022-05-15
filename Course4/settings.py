@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-f748aaotf73@e+_o7-q8m$_w3ju*9qnq+(4l0phl(r*ned3bn$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['krya.shop', '18.185.93.160', 'www.krya.shop', '127.0.0.1']
 
 
 # Application definition
