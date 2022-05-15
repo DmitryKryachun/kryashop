@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from collections import defaultdict
 
 from django.contrib import messages
