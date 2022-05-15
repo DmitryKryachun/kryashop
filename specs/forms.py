@@ -1,5 +1,3 @@
-from distutils.command.upload import upload
-from email.mime import image
 from django import forms
 
 from .models import FeatureValidator, CategoryFeature
